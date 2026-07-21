@@ -421,7 +421,7 @@
     // WhatsApp Business deep link — no phone number shown as plain text on the flyer,
     // which keeps it off scrapers/bots that harvest visible digits from images or HTML.
     var waNumber = "61450881361"; // country code + number, no + or spaces
-    var waMessage = "Hi Katay! I'd like to book a free first chat about tutoring for my child (name & age): ";
+    var waMessage = "Hi Katay! I'd like to book a free first chat about tutoring for my child (name & age & subjrct): ";
     var waLink = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(waMessage);
     document.getElementById('waBtn').setAttribute('href', waLink);
     new QRCode(document.getElementById("qrcode"), {
