@@ -86,10 +86,14 @@
     color:#EAF3F1;
     margin:0;
   }
-  .badge{
+  .badge-row{
     position:absolute;
     right:56px;
     bottom:34px;
+    display:flex;
+    gap:10px;
+  }
+  .badge{
     background:var(--paper);
     color:var(--teal-deep);
     border-radius:999px;
@@ -100,7 +104,13 @@
     align-items:center;
     gap:8px;
     box-shadow:0 6px 16px rgba(0,0,0,0.15);
+    white-space:nowrap;
   }
+  .badge-alt{
+    background:var(--ochre);
+    color:#3a2a05;
+  }
+  .badge-alt svg{stroke:#3a2a05;}
   .badge svg{width:16px;height:16px;flex-shrink:0;}
 
   main{
@@ -174,6 +184,7 @@
   .chip:nth-child(3){border-color:var(--plum);color:var(--plum);}
   .chip:nth-child(4){border-color:var(--sky);color:#3d6b78;}
   .chip:nth-child(5){border-color:var(--teal-deep);color:var(--teal-deep);}
+  .chip:nth-child(6){border-color:var(--ochre);color:#8a6413;}
   .chip svg{width:18px;height:18px;flex-shrink:0;}
 
   .two-col{
@@ -325,9 +336,15 @@
       <p class="eyebrow">Homeschool Tutoring &amp; Learning Support</p>
       <h1>Where Every Kind of Mind Thrives</h1>
       <p class="tagline">Fun, engaging, one-on-one lessons that meet your child exactly where they are &mdash; and help them fall in love with learning.</p>
-      <div class="badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#164F47" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V5l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
-        Police Clearance Verified
+      <div class="badge-row">
+        <div class="badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#164F47" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V5l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+          Police Clearance &amp; WWCC Verified
+        </div>
+        <div class="badge badge-alt">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#164F47" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h1l2-6h9l3 6h1a1 1 0 001-1v-3l-2-4h-9L6 13H3v3a1 1 0 001 1z"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="16.5" cy="18" r="1.6"/></svg>
+          I Travel To You
+        </div>
       </div>
     </header>
 
@@ -362,6 +379,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6c-1.7-1.7-4.4-1.7-6.1 0L12 7.3 9.3 4.6c-1.7-1.7-4.4-1.7-6.1 0-1.7 1.7-1.7 4.4 0 6.1L12 19.4l8.8-8.7c1.7-1.7 1.7-4.4 0-6.1z"/></svg>
           Every Learning Style
         </div>
+        <div class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h1l2-6h9l3 6h1a1 1 0 001-1v-3l-2-4h-9L6 13H3v3a1 1 0 001 1z"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="16.5" cy="18" r="1.6"/></svg>
+          Mobile &mdash; I Come To You
+        </div>
       </div>
 
       <div class="two-col">
@@ -375,9 +396,10 @@
           </ul>
         </div>
         <div class="card">
-          <h3>Safe, Trusted, Experienced</h3>
+          <h3>Safe, Trusted &amp; Comes To You</h3>
           <ul>
-            <li>Current Police Clearance / Working With Children check</li>
+            <li>Current Working With Children Check (WWCC) &amp; Police Clearance</li>
+            <li>I travel to your home for lessons &mdash; no need to pack the kids up</li>
             <li>Background supervising homeschool students day-to-day</li>
             <li>Warm, reliable presence your family can count on</li>
             <li>Clear, respectful communication with parents throughout</li>
@@ -421,7 +443,7 @@
     // WhatsApp Business deep link — no phone number shown as plain text on the flyer,
     // which keeps it off scrapers/bots that harvest visible digits from images or HTML.
     var waNumber = "61450881361"; // country code + number, no + or spaces
-    var waMessage = "Hi Katay! I'd like to book a free first chat about tutoring for my child (name & age & subjrct): ";
+    var waMessage = "Hi Katay! I'd like to book a free first chat about tutoring for my child (name & age): ";
     var waLink = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(waMessage);
     document.getElementById('waBtn').setAttribute('href', waLink);
     new QRCode(document.getElementById("qrcode"), {
