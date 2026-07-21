@@ -352,6 +352,16 @@
     border-color:var(--teal-deep);
     color:#fff;
   }
+  .event-tab[data-color="online"].active{
+    background:var(--sky);
+    border-color:var(--sky);
+    color:#1c3a42;
+  }
+  .event-tab[data-color="class"].active{
+    background:var(--ochre);
+    border-color:var(--ochre);
+    color:#3a2a05;
+  }
   .calendly-btn{
     display:inline-flex;
     align-items:center;
@@ -364,12 +374,22 @@
     padding:13px 22px;
     border-radius:999px;
     margin-bottom:20px;
+    transition:background 0.25s ease, color 0.25s ease;
   }
+  .calendly-btn.color-online{background:var(--sky);color:#1c3a42;}
+  .calendly-btn.color-class{background:var(--ochre);color:#3a2a05;}
   .calendly-inline-widget{
     border-radius:16px;
     overflow:hidden;
     border:1px solid #23324B14;
   }
+  .calendly-panel{
+    border-radius:16px;
+    transition:box-shadow 0.25s ease;
+  }
+  .calendly-panel.color-intro .calendly-inline-widget{border-top:4px solid var(--teal-deep);}
+  .calendly-panel.color-online .calendly-inline-widget{border-top:4px solid var(--sky);}
+  .calendly-panel.color-class .calendly-inline-widget{border-top:4px solid var(--ochre);}
 
   @media print{
     body{background:none;padding:0;}
@@ -410,6 +430,8 @@
     .qr-wrap{align-items:flex-start;}
     .calendly-btn{width:100%;justify-content:center;}
     .calendly-inline-widget{min-width:100% !important;height:580px !important;}
+    .event-tabs{gap:6px;}
+    .event-tab{flex:1 1 45%;justify-content:center;font-size:12.5px;padding:9px 10px;}
   }
 </style>
 </head>
@@ -509,23 +531,32 @@
         <p class="section-label">Book a Time</p>
         <p class="booking-intro">Choose what you'd like to book, then pick a time that suits you. Prefer WhatsApp instead? Scroll down.</p>
         <div class="event-tabs" role="tablist">
-          <button class="event-tab active" data-url="https://calendly.com/kathybit/tuition-intro">
+          <button type="button" class="event-tab active" data-target="widget-intro" data-color="intro" data-url="https://calendly.com/kathybit/tuition-intro">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
             Free Intro Chat
           </button>
-          <button class="event-tab" data-url="https://calendly.com/kathybit/online-class">
+          <button type="button" class="event-tab" data-target="widget-online" data-color="online" data-url="https://calendly.com/kathybit/online-class">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
             Online Class
           </button>
-          <button class="event-tab" data-url="https://calendly.com/kathybit/class">
+          <button type="button" class="event-tab" data-target="widget-class" data-color="class" data-url="https://calendly.com/kathybit/class">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h1l2-6h9l3 6h1a1 1 0 001-1v-3l-2-4h-9L6 13H3v3a1 1 0 001 1z"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="16.5" cy="18" r="1.6"/></svg>
             In-Person Class
           </button>
         </div>
-        <a class="calendly-btn" id="calendlyOpenBtn" href="https://calendly.com/kathybit/tuition-intro" target="_blank" rel="noopener">
+        <a class="calendly-btn color-intro" id="calendlyOpenBtn" href="https://calendly.com/kathybit/tuition-intro" target="_blank" rel="noopener">
           Open in New Tab
         </a>
-        <div class="calendly-inline-widget" id="calendlyWidget" data-url="https://calendly.com/kathybit/tuition-intro?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:280px;height:650px;"></div>
+
+        <div class="calendly-panel color-intro" id="widget-intro">
+          <div class="calendly-inline-widget" data-url="https://calendly.com/kathybit/tuition-intro?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:280px;height:650px;"></div>
+        </div>
+        <div class="calendly-panel color-online" id="widget-online" style="display:none;">
+          <div class="calendly-inline-widget" data-url="https://calendly.com/kathybit/online-class?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:280px;height:650px;"></div>
+        </div>
+        <div class="calendly-panel color-class" id="widget-class" style="display:none;">
+          <div class="calendly-inline-widget" data-url="https://calendly.com/kathybit/class?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:280px;height:650px;"></div>
+        </div>
       </div>
     </main>
 
@@ -568,6 +599,26 @@
       colorDark: "#23324B",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
+    });
+
+    // Event-type tabs: show/hide the pre-loaded Calendly widget for each event.
+    // (All three widgets load on page load; switching tabs just toggles visibility —
+    // more reliable than re-initializing Calendly's widget dynamically.)
+    var tabs = document.querySelectorAll('.event-tab');
+    var panels = document.querySelectorAll('.calendly-panel');
+    var openBtn = document.getElementById('calendlyOpenBtn');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        tabs.forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+        var color = tab.getAttribute('data-color');
+        openBtn.setAttribute('href', tab.getAttribute('data-url'));
+        openBtn.className = 'calendly-btn color-' + color;
+        var targetId = tab.getAttribute('data-target');
+        panels.forEach(function(p){
+          p.style.display = (p.id === targetId) ? 'block' : 'none';
+        });
+      });
     });
   </script>
 </body>
